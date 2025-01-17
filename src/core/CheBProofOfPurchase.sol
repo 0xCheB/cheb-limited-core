@@ -65,7 +65,7 @@ contract CheBProofOfPurchase is ERC1155, ReentrancyGuard, Pausable {
 
     modifier onlyMinter() {
         if (controlCenter.paused()) revert ControlCenterPaused();
-        if (!controlCenter.hasRole(controlCenter.EXECUTIVE_ROLE(), msg.sender)) revert NotMinter();
+        if (!controlCenter.hasRole(controlCenter.VERIFIER_ROLE(), msg.sender)) revert NotMinter();
         _;
     }
 
