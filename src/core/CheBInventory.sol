@@ -82,12 +82,6 @@ contract CheBInventory is ReentrancyGuard, Pausable {
     );
 
     // Modifiers
-    modifier onlyVerifier() {
-        if (controlCenter.paused()) revert ControlCenterPaused();
-        if (!controlCenter.hasRole(controlCenter.VERIFIER_ROLE(), msg.sender)) revert NotVerifier();
-        _;
-    }
-
     modifier onlyAdmin() {
         if (controlCenter.paused()) revert ControlCenterPaused();
         if (!controlCenter.hasRole(controlCenter.ADMIN_ROLE(), msg.sender)) revert NotAdmin();
@@ -163,7 +157,7 @@ contract CheBInventory is ReentrancyGuard, Pausable {
         uint256 skuId,
         string calldata size,
         uint256 verifiedQuantity
-    ) external whenNotPaused nonReentrant onlyVerifier onlyWhitelisted(seller) {
+    ) external whenNotPaused nonReentrant onlyAdmin onlyWhitelisted(seller) {
         InventoryItem storage item = _inventory[seller][skuId][size];
         if (item.quantity == 0) revert InvalidQuantity();
         if (verifiedQuantity > item.quantity) revert InvalidQuantity();
